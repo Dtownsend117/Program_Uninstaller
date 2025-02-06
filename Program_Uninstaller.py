@@ -5,7 +5,7 @@ import speech_recognition as sr
 def list_installed_programs():
     """List all installed programs on the Windows system."""
     programs = []
-    uninstall_key = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+    uninstall_key = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" # Windows registry key to uninstall software
     try:
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, uninstall_key) as key:
             for i in range(winreg.QueryInfoKey(key)[0]):
@@ -22,7 +22,7 @@ def list_installed_programs():
 
 def uninstall_program(program_name):
     """Uninstall the specified program using its uninstall string."""
-    uninstall_key = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" # Windows registry key to uninstall software
+    uninstall_key = r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
     try:
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, uninstall_key) as key:
             for i in range(winreg.QueryInfoKey(key)[0]):
@@ -44,8 +44,8 @@ def recognize_speech():
     """Recognize speech input from the user."""
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
-        print("Please say the number of the program you want to uninstall:")
-        recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
+        print("Which program would you like to uninstall? Please say the number:")
+        recognizer.adjust_for_ambient_noise(source) 
         audio = recognizer.listen(source)
 
     try:
@@ -75,7 +75,7 @@ def main():
     choice = recognize_speech()
     if choice is not None and 1 <= choice <= len(programs):
         program_to_uninstall = programs[choice - 1]
-        confirm = input(f"Are you sure you want to uninstall '{program_to_uninstall}'? (y/n): ")
+        confirm = input(f"Confirm uninstallation of '{program_to_uninstall}'? (y/n): ")
         if confirm.lower() == 'y':
             uninstall_program(program_to_uninstall)
         else:
